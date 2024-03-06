@@ -56,7 +56,7 @@ if __name__ == "__main__":
                         rows = table.find_elements(By.TAG_NAME, "tr")
 
                         # Open the CSV file in append mode
-                        with open('arrivals_flights.csv', 'a') as file:
+                        with open('flights.csv', 'a') as file:
                             date = rows[0].find_elements(By.TAG_NAME, "td")[0].text.replace(',', '')
                             # Loop through rows
                             for row in rows[1:]:

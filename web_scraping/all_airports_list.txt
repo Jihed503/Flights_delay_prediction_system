@@ -1,2 +1,1 @@
-https://www.flightradar24.com/data/airports/mga
 https://www.flightradar24.com/data/airports/doh

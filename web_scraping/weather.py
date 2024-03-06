@@ -7,8 +7,6 @@ if __name__ == "__main__":
 
     airports_list_txt = "all_airports_list.txt"
 
-    
-
     # Looping over airports list
     with open(airports_list_txt, 'r') as airports_list:
         for airport in airports_list:
