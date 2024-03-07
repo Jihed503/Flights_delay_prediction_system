@@ -33,7 +33,8 @@ if __name__ == "__main__":
                         button = WebDriverWait(driver, 10).until(
                         EC.element_to_be_clickable((By.CLASS_NAME, 'btn-flights-load'))
                         )
-                        button.click()
+                        # Use JavaScript to click the button because an ad receives the click always
+                        driver.execute_script("arguments[0].click();", button)
                     except:
                         # If the button is not found, print a message and continue
                         print("Button not found, continuing without clicking.")

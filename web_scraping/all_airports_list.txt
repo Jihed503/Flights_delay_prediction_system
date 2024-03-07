@@ -1,1 +1,2 @@
+https://www.flightradar24.com/data/airports/gae
 https://www.flightradar24.com/data/airports/doh
