@@ -1,11 +1,14 @@
 from airports import *
 
-if __name__ == "__main__":
+def reviews_scraping():
     '''
-    Get the user reviews of each airport of all time and save it to reviews.csv. 
+    Get the user reviews of each airport of all time and returns a list. 
     '''
 
     airports_list_txt = "all_airports_list.txt"
+
+    # List containing all users reviews
+    reviews = []
 
     # Looping over airports list
     with open(airports_list_txt, 'r') as airports_list:
@@ -49,19 +52,10 @@ if __name__ == "__main__":
                     # Find all the comments
                     comments = driver.find_elements(By.CSS_SELECTOR, 'div.content')
                     
-                    # List containing all users reviews
-                    reviews = []
-
                     # For each comment add the airport name and append to reviews list
                     for comment in comments:
                         reviews.append(comment.text.replace(',', ' ') + ',' + airport_name + '\n')
 
-                    # Open the CSV file in append mode
-                    with open('reviews.csv', 'a') as file:
-                        for row in reviews:
-                            file.write(row)
-                    
-                    
                 except NoSuchElementException as e:
                     print(f"Element not found: {e}")
                 except TimeoutException as e:
@@ -70,7 +64,23 @@ if __name__ == "__main__":
                     print(f"An error occurred: {e}")
                 finally: continue
             finally:
-                    # Close the web browser
-                    driver.quit()
+                # Close the web browser
+                driver.quit()
+
+    return reviews 
+
+
+if __name__ == "__main__":
+    '''
+    Get the user reviews of each airport of all time and save it to reviews.csv. 
+    '''
+
+    reviews = reviews_scraping()
+
+    # Open the CSV file in append mode
+    with open('reviews.csv', 'a') as file:
+        for row in reviews:
+            file.write(row)
+    
     
     

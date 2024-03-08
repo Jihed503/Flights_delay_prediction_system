@@ -132,13 +132,15 @@ Day: 5th,Time: 20:00 UTC,Wind direction: 330°,Wind speed: 12kt,Temperature: 20°C
 
 Day: 5th,Time: 19:00 UTC,Wind direction: 340°,Wind speed: 14kt,Temperature: 20°C,Dew point: 13°C,Pressure: 1016 hPa,Visibility: Sky and visibility OK,19:00:00 2024-03-05,doh
 
-Day: 5th,Time: 18:00 UTC,Wind direction: 330°,Wind speed: 15kt,Temperature: 20°C,Dew point: 14°C,Pressure: 1016 hPa,18:00:00 2024-03-05,doh
+Day: 5th,Time: 18:00 UTC,Wind direction: 330°,Wind speed: 15kt,Temperature: 20°C,Dew point: 14°C,Pressure: 1016 hPa,Visibility: Sky and visibility OK,18:00:00 2024-03-05,doh
 
-Day: 5th,Time: 17:00 UTC,Wind direction: 340°,Wind speed: 15kt,Temperature: 21°C,17:00:00 2024-03-05,doh
+Day: 5th,Time: 17:00 UTC,Wind direction: 340°,Wind speed: 15kt,Temperature: 21°C,Dew point: 14°C,Pressure: 1016 hPa,17:00:00 2024-03-05,doh
 
-Day: 5th,Time: 16:00 UTC,Wind direction: 360°,16:00:00 2024-03-05,doh
+Day: 5th,Time: 16:00 UTC,Wind direction: 360°,Wind speed: 13kt,Temperature: 21°C,16:00:00 2024-03-05,doh
 
-Day: 5th,Time: 15:00 UTC,15:00:00 2024-03-05,doh
+Day: 5th,Time: 15:00 UTC,Wind direction: 10°,15:00:00 2024-03-05,doh
+
+Day: 5th,Time: 14:00 UTC,14:00:00 2024-03-05,doh
 
 Day: 8th,Time: 13:00 UTC,Wind direction: 160°,Wind speed: 10kt,Temperature: 23°C,Dew point: 7°C,Pressure: 1012 hPa,Visibility: 9999 m,13:00:00 2024-03-08,sfa
 Day: 8th,Time: 12:00 UTC,Wind direction: 160°,Wind speed: 10kt,Temperature: 22°C,Dew point: 6°C,Pressure: 1013 hPa,Visibility: 9999 m,12:00:00 2024-03-08,sfa
@@ -205,7 +207,8 @@ Day: 5th,Time: 22:00 UTC,Wind direction: 30°,Wind speed: 4kt,Temperature: 16°C,D
 Day: 5th,Time: 21:00 UTC,Wind direction: 10°,Wind speed: 4kt,Temperature: 17°C,Dew point: 6°C,Pressure: 1021 hPa,Visibility: 9999 m,21:00:00 2024-03-05,sfa
 Day: 5th,Time: 20:00 UTC,Wind direction: 340°,Wind speed: 5kt,Temperature: 18°C,Dew point: 6°C,Pressure: 1021 hPa,Visibility: 9999 m,20:00:00 2024-03-05,sfa
 Day: 5th,Time: 19:00 UTC,Wind direction: 360°,Wind speed: 4kt,Temperature: 19°C,Dew point: 5°C,Pressure: 1020 hPa,Visibility: 9999 m,19:00:00 2024-03-05,sfa
-Day: 5th,Time: 18:00 UTC,Wind direction: 340°,Wind speed: 7kt,Temperature: 21°C,Dew point: 6°C,Pressure: 1020 hPa,18:00:00 2024-03-05,sfa
-Day: 5th,Time: 17:00 UTC,Wind direction: 320°,Wind speed: 3kt,Temperature: 21°C,17:00:00 2024-03-05,sfa
-Day: 5th,Time: 16:00 UTC,Wind direction: 310°,16:00:00 2024-03-05,sfa
-Day: 5th,Time: 15:00 UTC,15:00:00 2024-03-05,sfa
+Day: 5th,Time: 18:00 UTC,Wind direction: 340°,Wind speed: 7kt,Temperature: 21°C,Dew point: 6°C,Pressure: 1020 hPa,Visibility: 9999 m,18:00:00 2024-03-05,sfa
+Day: 5th,Time: 17:00 UTC,Wind direction: 320°,Wind speed: 3kt,Temperature: 21°C,Dew point: 6°C,Pressure: 1019 hPa,17:00:00 2024-03-05,sfa
+Day: 5th,Time: 16:00 UTC,Wind direction: 310°,Wind speed: 8kt,Temperature: 22°C,16:00:00 2024-03-05,sfa
+Day: 5th,Time: 15:00 UTC,Wind direction: 310°,15:00:00 2024-03-05,sfa
+Day: 5th,Time: 14:00 UTC,14:00:00 2024-03-05,sfa

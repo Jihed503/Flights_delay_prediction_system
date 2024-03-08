@@ -1,11 +1,13 @@
 from airports import *
 
-if __name__ == "__main__":
+def weather_scraping():
     '''
-    Get the weather of each airport for the past three days and save it to weather.csv. 
+    Get the weather of each airport for the past three days and returns a list. 
     '''
-
     airports_list_txt = "all_airports_list.txt"
+
+    # List containing all rows of weather
+    output = []
 
     # Looping over airports list
     with open(airports_list_txt, 'r') as airports_list:
@@ -38,9 +40,6 @@ if __name__ == "__main__":
                     # Find all the 'tr' elements with class 'master'
                     master_rows = driver.find_elements(By.CSS_SELECTOR, 'tr.master')
                     
-                    # List containing all rows of weather
-                    output = []
-
                     # For each 'slave' row, find the 'li' elements and extract their text
                     for i in range(len(slave_rows)):
                         # Since the 'li' elements are hidden, we may need to make them visible first
@@ -54,12 +53,7 @@ if __name__ == "__main__":
                         list_contents = [item.text for item in list_items if item.text.strip() != ''] + [' '.join(master_rows[i].text.split(' ')[-1:-3:-1])] + [airport_name]
 
                         if list_contents:
-                            output.append(list_contents)
-                    # Open the CSV file in append mode
-                    with open('weather.csv', 'a') as file:
-                        for row in output:
-                            file.write(','.join(row) + '\n')
-                    
+                            output.append(list_contents)                       
                     
                 except NoSuchElementException as e:
                     print(f"Element not found: {e}")
@@ -71,5 +65,17 @@ if __name__ == "__main__":
             finally:
                     # Close the web browser
                     driver.quit()
+    return output 
+
+if __name__ == "__main__":
+    '''
+    Get the weather of each airport for the past three days and save it to weather.csv. 
+    '''
+
+    output = weather_scraping()
     
+    # Open the CSV file in append mode
+    with open('weather.csv', 'a') as file:
+        for row in output:
+            file.write(','.join(row) + '\n')
     

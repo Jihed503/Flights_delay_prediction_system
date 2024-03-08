@@ -107,7 +107,7 @@ if __name__ == "__main__":
 
     info = [] # Contains airports info
     try:
-        for airport_link in airports:
+        for airport_link in airports[:1]:
             # Navigate to the airport's main page
             driver.get(airport_link)
             
@@ -135,3 +135,4 @@ if __name__ == "__main__":
     with open('airports_info.csv', 'w') as file:
         for line in info:
             file.write(f"{','.join(line)}\n")
+            

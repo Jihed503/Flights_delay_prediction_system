@@ -1,19 +1,17 @@
-import time
 from airports import *
 
-if __name__ == "__main__":
+def flights_scraping():
     '''
-    Save flight details of each airport in text files named arrivals/departures_flights.csv.
+    Returns a list of flight details of each airport.
     '''
 
-    
     airports_list_txt = "all_airports_list.txt"
 
-        
+    flights = []
 
     # Looping over airports list
     with open(airports_list_txt, 'r') as airports_list:
-        for airport in ['https://www.flightradar24.com/data/airports/doh']: #airports_list:
+        for airport in airports_list:
             airport_name = list(airport.split('/'))[-1]
 
             for type in ['arrivals']:#, 'departures']:
@@ -31,7 +29,6 @@ if __name__ == "__main__":
 
                     # Click on the alert button
                     alert_click(driver, 'onetrust-accept-btn-handler')
-
                     
                     # Load earlier flights
                     while True:
@@ -61,40 +58,7 @@ if __name__ == "__main__":
                         except Exception as e:
                             # If the button is not found, print a message and continue
                             print("Load later flights button not found, continuing without clicking.\n ",e)
-                            break                
-                    
-                    '''
-                    # Display the whole table
-                    while True:
-                        try:
-                            # Use WebDriverWait to wait for the buttons to be present and clickable
-                            buttons = WebDriverWait(driver, 10).until(
-                                EC.visibility_of_all_elements_located((By.CLASS_NAME, 'btn-flights-load'))
-                            )
-        
-                            if buttons:
-                                for button in buttons:
-                                    try:
-                                        # Ensure the button is clickable before clicking
-                                        WebDriverWait(driver, 5).until(EC.element_to_be_clickable(button))
-                                        button.click()
-                                        # Wait a bit for the data to load, adjust time as needed
-                                        WebDriverWait(driver, 10).until(
-                                            EC.staleness_of(button)
-                                        )
-                                    except TimeoutException:
-                                        print("Button was not clickable.")
-                                    except Exception as e: print(e)
-                            else:
-                                # If no buttons found, break from the loop
-                                print("No more buttons to click.")
-                                break
-                        except TimeoutException:
-                            # If buttons are not found within the timeout period, assume no more buttons to click
-                            print("No buttons found or they took too long to appear.")
                             break
-                        except Exception as e: print(e)
-                        '''
                 
                     try:
                         # Explicit wait for the table to be present
@@ -108,24 +72,20 @@ if __name__ == "__main__":
                             # Find all rows in the table
                             rows = table.find_elements(By.TAG_NAME, "tr")
 
-                            # Open the CSV file in append mode
-                            with open('flights.csv', 'a') as file:
-                                date = rows[0].find_elements(By.TAG_NAME, "td")[0].text.replace(',', '')
-                                # Loop through rows
-                                for row in rows[1:]:
-                                    # Find all cells within the row
-                                    cells = row.find_elements(By.TAG_NAME, "td")  
-                                    if len(cells)>1:  # Rows with cells
-                                        line_list = [cell.text for cell in cells if cell.text]
-                                        if line_list[-1] != "Scheduled":
-                                            # Write the cell text to the CSV file
-                                            file.write(airport_name + ',' + ','.join(line_list) + ',' + date + ',' + type + '\n')
-                                    else: 
-                                        #file.write(cells[0].text.replace(',', '') + '\n') # Write the date
-                                        date = cells[0].text.replace(',', '')
-                
+                            date = rows[0].find_elements(By.TAG_NAME, "td")[0].text.replace(',', '')
+                            # Loop through rows
+                            for row in rows[1:]:
+                                # Find all cells within the row
+                                cells = row.find_elements(By.TAG_NAME, "td")  
+                                if len(cells)>1:  # Rows with cells
+                                    line_list = [cell.text for cell in cells if cell.text]
+                                    if line_list[-1] != "Scheduled":
+                                        # Write the cell text to the CSV file
+                                        flights.append(airport_name + ',' + ','.join(line_list) + ',' + date + ',' + type + '\n')
+                                else: 
+                                    #file.write(cells[0].text.replace(',', '') + '\n') # Write the date
+                                    date = cells[0].text.replace(',', '')
 
-                    
                     except NoSuchElementException as e:
                         print(f"Element not found: {e}")
                     except TimeoutException as e:
@@ -138,6 +98,20 @@ if __name__ == "__main__":
                     # Close the web browser
                     driver.quit()
 
+    return flights
+
+
+if __name__ == "__main__":
+    '''
+    Save flight details of each airport in text files named arrivals/departures_flights.csv.
+    '''
+    flights = flights_scraping()
+
+    # Open the CSV file in append mode
+    with open('flights.csv', 'a') as file:
+        for row in flights:
+            file.write(row)
+    
 
 
     
