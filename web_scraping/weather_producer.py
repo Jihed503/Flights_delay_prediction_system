@@ -3,6 +3,15 @@ import json
 from weather import *
 
 def delivery_report(err, msg):
+    '''
+    Prints the delivery status of a message.
+
+    Parameters:
+    - err: Error object, if any, or None.
+    - msg: The message object.
+
+    Outputs a failure message with the error or a success message with the message's topic and partition.
+    '''
     if err is not None:
         print('Message delivery failed: {}'.format(err))
     else:

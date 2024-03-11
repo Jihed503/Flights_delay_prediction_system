@@ -2,7 +2,14 @@ from airports import *
 
 def reviews_scraping():
     '''
-    Get the user reviews of each airport of all time and returns a list. 
+    Collects user reviews for each airport from a list and returns them as a list.
+
+    This function reads an airport list from a file, navigates to the review page for each,
+    and scrapes user reviews. It tries to load all available reviews by clicking the load more button
+    up to 20 times for each airport.
+
+    Returns:
+    - A list of strings, each containing a user review followed by the airport name.
     '''
 
     airports_list_txt = "all_airports_list.txt"

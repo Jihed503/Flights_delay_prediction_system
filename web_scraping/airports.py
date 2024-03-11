@@ -1,4 +1,3 @@
-from math import e
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
@@ -7,14 +6,13 @@ from selenium.common.exceptions import NoSuchElementException, TimeoutException
 
 def alert_click(driver, id):
     '''
-    Click on the alert button.
+    Attempts to click a button with a specified ID within 10 seconds.
 
-    Parameters
-        ----------
-        driver : WebDriver
-            Selenium WebDriver
-        tag : str
-            Id of the button
+    Parameters:
+    - driver: Selenium WebDriver instance for browser interaction.
+    - id: String specifying the ID of the button to click.
+
+    If the button is not clickable within 10 seconds, it prints an error message and continues.
     '''
     try:
         button = WebDriverWait(driver, 10).until(

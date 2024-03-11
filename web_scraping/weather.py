@@ -2,7 +2,14 @@ from airports import *
 
 def weather_scraping():
     '''
-    Get the weather of each airport for the past three days and returns a list. 
+    Retrieves weather data for each airport for the past three days.
+
+    Reads airport codes from a text file and scrapes weather information for the past three days
+    from each airport's dedicated weather page. It compiles this data into a list of weather details.
+
+    Returns:
+    - A list containing weather data for each airport. Each entry includes weather details
+      and the corresponding airport name.
     '''
     airports_list_txt = "all_airports_list.txt"
 

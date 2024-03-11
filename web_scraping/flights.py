@@ -2,7 +2,13 @@ from airports import *
 
 def flights_scraping():
     '''
-    Returns a list of flight details of each airport.
+    Gathers and returns flight details from a list of airports.
+
+    Reads airport codes from a text file, scrapes flight information for each airport,
+    and compiles a list of flights details including arrivals and departures.
+
+    Returns:
+    - A list of flight details, including airport name, date, and flight status.
     '''
 
     airports_list_txt = "all_airports_list.txt"
