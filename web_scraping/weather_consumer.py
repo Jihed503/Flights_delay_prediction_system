@@ -18,6 +18,7 @@ consumer.subscribe(['weather_data_topic'])
 
 # Process messages
 try:
+    print("Waiting for messages ...")
     while True:
         msg = consumer.poll(timeout=1.0)
         if msg is None:
@@ -36,13 +37,18 @@ try:
             with open('weather_kafka.csv', 'a') as file:
                 file.write(','.join(data) + '\n')
             
-            '''
+            
             # Write the data to HDFS
             hdfs_client = InsecureClient('http://localhost:9870', user='JIHED')
-            with hdfs_client.write('data/weather_data.csv', append=True) as writer:
-                json.dump(data, writer)
-                writer.write('\n')
-            '''
+
+            #with hdfs_client.write('data/weather_data.csv', append=True) as writer:
+            #    json.dump(data, writer)
+            #    writer.write(','.join(data) + '\n')
+
+           
+
+            hdfs_client.write('data/weather_data.csv', data=json.dumps(','.join(data) + '\n'), encoding='utf-8', append=True)
+            
 
 except KeyboardInterrupt:
     pass

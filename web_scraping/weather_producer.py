@@ -88,9 +88,13 @@ if __name__ == "__main__":
                 except Exception as e:
                     print(f"An error occurred: {e}")
                 finally: continue
+                
+            except:
+                # Print the airport where an error has occured
+                print(airport + '\n')
             finally:
-                    # Close the web browser
-                    driver.quit()
+                # Close the web browser
+                driver.quit()
 
     # Wait for any outstanding messages to be delivered and delivery report callbacks to be triggered
     producer.flush()

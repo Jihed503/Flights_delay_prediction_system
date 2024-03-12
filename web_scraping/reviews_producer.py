@@ -71,7 +71,7 @@ with open(airports_list_txt, 'r') as airports_list:
                 comments = driver.find_elements(By.CSS_SELECTOR, 'div.content')
 
                 
-                
+                ########----------------------------Producer----------------------------########
                 # For each comment add the airport name and append to reviews list
                 for comment in comments:
                     # Convert the row to a JSON string
@@ -91,6 +91,10 @@ with open(airports_list_txt, 'r') as airports_list:
             except Exception as e:
                 print(f"An error occurred: {e}")
             finally: continue
+
+        except:
+            # Print the airport where an error has occured
+            print(airport + '\n')
         finally:
             # Close the web browser
             driver.quit()

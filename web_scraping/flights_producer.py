@@ -101,6 +101,7 @@ with open(airports_list_txt, 'r') as airports_list:
                             if len(cells)>1:  # Rows with cells
                                 line_list = [cell.text for cell in cells if cell.text]
                                 if line_list[-1] != "Scheduled":
+                                    ########----------------------------Producer----------------------------########
                                     # Convert the row to a JSON string
                                     message = json.dumps(airport_name + ',' + ','.join(line_list) + ',' + date + ',' + type + '\n')
                                     # Send the message to a Kafka topic, with a callback for delivery reports
@@ -120,6 +121,9 @@ with open(airports_list_txt, 'r') as airports_list:
                     print(f"An error occurred: {e}")
                 finally: continue
 
+            except:
+                # Print the airport where an error has occured
+                print(airport + '\n')
             finally:
                 # Close the web browser
                 driver.quit()

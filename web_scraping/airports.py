@@ -58,7 +58,7 @@ if __name__ == "__main__":
     # List of all airports
     airports = []
     # Iterate through each URL
-    for country in ['https://www.flightradar24.com/data/airports/tunisia']: # country_urls:
+    for country in country_urls:
         driver = webdriver.Edge()
         try:
             # Navigate to the URL
@@ -105,7 +105,7 @@ if __name__ == "__main__":
 
     info = [] # Contains airports info
     try:
-        for airport_link in airports[:1]:
+        for airport_link in airports:
             # Navigate to the airport's main page
             driver.get(airport_link)
             
