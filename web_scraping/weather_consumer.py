@@ -1,5 +1,6 @@
 from confluent_kafka import Consumer, KafkaException, KafkaError
 import json
+from hdfs import InsecureClient
 
 # Consumer configuration
 conf = {
@@ -34,6 +35,15 @@ try:
             # Write the data to a CSV file
             with open('weather_kafka.csv', 'a') as file:
                 file.write(','.join(data) + '\n')
+            
+            '''
+            # Write the data to HDFS
+            hdfs_client = InsecureClient('http://localhost:9870', user='JIHED')
+            with hdfs_client.write('data/weather_data.csv', append=True) as writer:
+                json.dump(data, writer)
+                writer.write('\n')
+            '''
+
 except KeyboardInterrupt:
     pass
 finally:
