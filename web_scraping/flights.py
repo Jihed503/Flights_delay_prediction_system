@@ -39,7 +39,7 @@ def flights_scraping():
                     # Load earlier flights
                     while True:
                         try:
-                            button = WebDriverWait(driver, 10).until(
+                            button = WebDriverWait(driver, 30).until(
                                 EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Load earlier flights')]"))
                             )
                             # Use JavaScript to click the button because an ad receives the click always

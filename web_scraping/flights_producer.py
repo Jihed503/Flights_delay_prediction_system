@@ -35,7 +35,7 @@ with open(airports_list_txt, 'r') as airports_list:
     for airport in airports_list:
         airport_name = list(airport.split('/'))[-1]
 
-        for type in ['arrivals']:#, 'departures']:
+        for type in ['departures']:#, 'arrivals']:
             try:
                 link = airport + '/' + type
 
@@ -83,7 +83,7 @@ with open(airports_list_txt, 'r') as airports_list:
             
                 try:
                     # Explicit wait for the table to be present
-                    WebDriverWait(driver, 10).until(
+                    WebDriverWait(driver, 30).until(
                         EC.presence_of_element_located((By.TAG_NAME, "tbody"))
                     )
                     # Locate the table
