@@ -54,7 +54,7 @@ with open(airports_list_txt, 'r') as airports_list:
                 # Load earlier flights
                 while True:
                     try:
-                        button = WebDriverWait(driver, 10).until(
+                        button = WebDriverWait(driver, 30).until(
                             EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Load earlier flights')]"))
                         )
                         # Use JavaScript to click the button because an ad receives the click always
@@ -68,7 +68,7 @@ with open(airports_list_txt, 'r') as airports_list:
                 # Load later flights
                 while True:
                     try:
-                        WebDriverWait(driver, 10).until(
+                        WebDriverWait(driver, 30).until(
                             EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Load later flights')]"))
                         )
                         button = driver.find_element(By.XPATH, "//button[contains(text(), 'Load later flights')]")

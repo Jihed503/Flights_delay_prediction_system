@@ -34,12 +34,12 @@ try:
             # Proper message
             data = json.loads(msg.value().decode('utf-8'))
             # Write the data to a CSV file
-            with open('weather_kafka.csv', 'a') as file:
+            with open('../data/history/weather_kafka.csv', 'a', encoding="utf-8") as file:
                 file.write(','.join(data) + '\n')
             
             
             # Write the data to HDFS
-            hdfs_client = InsecureClient('http://localhost:9870', user='JIHED')
+            #hdfs_client = InsecureClient('http://localhost:9870', user='JIHED')
 
             #with hdfs_client.write('data/weather_data.csv', append=True) as writer:
             #    json.dump(data, writer)
@@ -47,7 +47,7 @@ try:
 
            
 
-            hdfs_client.write('data/weather_data.csv', data=json.dumps(','.join(data) + '\n'), encoding='utf-8', append=True)
+            #hdfs_client.write('data/weather_data.csv', data=json.dumps(','.join(data) + '\n'), encoding='utf-8', append=True)
             
 
 except KeyboardInterrupt:
