@@ -32,7 +32,7 @@ try:
             # Proper message
             data = json.loads(msg.value().decode('utf-8'))
             # Write the data to a CSV file
-            with open('../data/history/flights_kafka.csv', 'a', encoding="utf-8") as file:
+            with open('./data/history/flights.csv', 'a', encoding="utf-8") as file:
                 file.write(data)
 except KeyboardInterrupt:
     pass

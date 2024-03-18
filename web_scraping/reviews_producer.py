@@ -26,7 +26,7 @@ producer = Producer(conf)
 ##########********************************************************##########
 ##########--------------------Reviews Scraping--------------------##########
 ##########********************************************************##########
-airports_list_txt = "all_airports_list.txt"
+airports_list_txt = "./web_scraping/all_airports_list.txt"
 
 # Looping over airports list
 with open(airports_list_txt, 'r') as airports_list:
@@ -37,7 +37,7 @@ with open(airports_list_txt, 'r') as airports_list:
         # Maximize the browser window to full screen
         driver.maximize_window()
 
-        airport_name = list(airport.split('/'))[-1]
+        airport_name = list(airport.split('/'))[-1].strip()
 
         link = airport + '/reviews'
         try:
