@@ -35,7 +35,7 @@ with open(airports_list_txt, 'r') as airports_list:
     for airport in airports_list:
         airport_name = list(airport.split('/'))[-1].strip()
 
-        for type in ['departures']:#, 'arrivals']:
+        for type in ['arrivals']:
             try:
                 link = airport + '/' + type
 
@@ -99,7 +99,7 @@ with open(airports_list_txt, 'r') as airports_list:
                             # Find all cells within the row
                             cells = row.find_elements(By.TAG_NAME, "td")  
                             if len(cells)>1:  # Rows with cells
-                                line_list = [cell.text for cell in cells if cell.text]
+                                line_list = [cell.text for cell in cells]
                                 if line_list[-1] != "Scheduled":
                                     ########----------------------------Producer----------------------------########
                                     # Convert the row to a JSON string

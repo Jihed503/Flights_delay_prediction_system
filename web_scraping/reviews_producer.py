@@ -32,7 +32,9 @@ airports_list_txt = "./web_scraping/all_airports_list.txt"
 with open(airports_list_txt, 'r') as airports_list:
     for airport in airports_list:
         # Create a new instance of the web browser
-        driver = webdriver.Edge()
+        options = webdriver.EdgeOptions()
+        options.add_argument('--headless')
+        driver = webdriver.Edge(options=options)
 
         # Maximize the browser window to full screen
         driver.maximize_window()

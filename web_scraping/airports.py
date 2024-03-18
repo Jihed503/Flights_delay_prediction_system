@@ -91,7 +91,7 @@ def airports_links():
         driver.quit()
 
     # Save airports lists in a text file
-    with open('all_airports_list.txt', 'w') as file:
+    with open('./web_scraping/all_airports_list.txt', 'w') as file:
         # List of all airports
         #airports = []
         # Iterate through each URL
@@ -153,8 +153,7 @@ def airports_info():
     # Setup WebDriver using Edge
     driver = webdriver.Edge()
     driver.maximize_window()
-    info = [] # Contains airports info
-    with open('all_airports_list.txt', 'r') as file:
+    with open('./web_scraping/all_airports_list.txt', 'r') as file:
         try:
             for airport_link in file:
                 # Navigate to the airport's main page
@@ -172,18 +171,17 @@ def airports_info():
 
                 else:
                     airport_info = [element.text for element in info_elements]\
-                        + [list(airport_link.split('/'))[-1]] # Airport id
+                        + [list(airport_link.split('/'))[-1].strip()] # Airport id
                         
-                info.append(airport_info)
+                # Save airports info in a csv file
+                with open('./data/history/airports_info.csv', 'a') as file:
+                    file.write(f"{','.join(airport_info)}\n")
         except Exception as e: print(e)
         finally: 
             # Close the browser window
             driver.quit()
 
-    # Save airports info in a csv file
-    with open('airports_info.csv', 'w') as file:
-        for line in info:
-            file.write(f"{','.join(line)}\n")
+    
      
 
 if __name__ == "__main__":
@@ -191,7 +189,7 @@ if __name__ == "__main__":
     Save all airports urls in a text file named all_airports_list.txt
     and save all airports info in a csv file named airports_info.csv.
     '''
-    airports_links()
+    airports_info()
 
 
     

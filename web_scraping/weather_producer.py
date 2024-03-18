@@ -33,7 +33,9 @@ if __name__ == "__main__":
     with open(airports_list_txt, 'r') as airports_list:
         for airport in airports_list:
             # Create a new instance of the web browser
-            driver = webdriver.Edge()
+            options = webdriver.EdgeOptions()
+            options.add_argument('--headless')
+            driver = webdriver.Edge(options=options)
 
             # Maximize the browser window to full screen
             driver.maximize_window()
@@ -70,7 +72,7 @@ if __name__ == "__main__":
                         list_items = slave_rows[i].find_elements(By.TAG_NAME, 'li')
         
                         # Extract the text from each 'li' element
-                        list_contents = [item.text for item in list_items if item.text.strip() != ''] + [' '.join(master_rows[i].text.split(' ')[-1:-3:-1])] + [airport_name]
+                        list_contents = [item.text for item in list_items] + [' '.join(master_rows[i].text.split(' ')[-1:-3:-1])] + [airport_name]
 
                         ########----------------------------Producer----------------------------########
                         # Convert the row to a JSON string
