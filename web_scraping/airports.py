@@ -1,3 +1,4 @@
+import re
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
@@ -163,15 +164,29 @@ def airports_info():
 
                 airport_info = []
                 try:
-                    info_elements = driver.find_elements(By.CLASS_NAME, 'chart-center')
+                    # Statistics
+                    info_elements = WebDriverWait(driver, 120).until(
+                            EC.presence_of_all_elements_located((By.CLASS_NAME, 'chart-center'))
+                        )
+                    
+                    # Regular expression pattern to match the time format HH:MM
+                    time_pattern = re.compile(r'\d{2}:\d{2}')
+
+                    utc = '-'
+                    local = '-'
+                    # Loop until time matches the time format (not '--:--')
+                    while '-' in utc or '-' in local:
+                        # UTC time
+                        utc = driver.find_element(By.CLASS_NAME, "items-baseline").text
+                        # Local time 
+                        local = driver.find_element(By.CLASS_NAME, "clock-time").text
                 except NoSuchElementException:
                         print("Elements not found, continuing without scraping.")
                 except TimeoutException:
                         print("Timed out waiting for elements to load")    
-
                 else:
                     airport_info = [element.text for element in info_elements]\
-                        + [list(airport_link.split('/'))[-1].strip()] # Airport id
+                        + [utc.replace('\n', ' '), local, list(airport_link.split('/'))[-1].strip()] # utc time, local time, Airport id
                         
                 # Save airports info in a csv file
                 with open('./data/history/airports_info.csv', 'a') as file:

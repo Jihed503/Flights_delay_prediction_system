@@ -33,9 +33,7 @@ if __name__ == "__main__":
     with open(airports_list_txt, 'r') as airports_list:
         for airport in airports_list:
             # Create a new instance of the web browser
-            options = webdriver.EdgeOptions()
-            options.add_argument('--headless')
-            driver = webdriver.Edge(options=options)
+            driver = webdriver.Edge()
 
             # Maximize the browser window to full screen
             driver.maximize_window()

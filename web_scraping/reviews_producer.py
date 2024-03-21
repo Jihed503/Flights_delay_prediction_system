@@ -32,9 +32,7 @@ airports_list_txt = "./web_scraping/all_airports_list.txt"
 with open(airports_list_txt, 'r') as airports_list:
     for airport in airports_list:
         # Create a new instance of the web browser
-        options = webdriver.EdgeOptions()
-        options.add_argument('--headless')
-        driver = webdriver.Edge(options=options)
+        driver = webdriver.Edge()
 
         # Maximize the browser window to full screen
         driver.maximize_window()
@@ -53,7 +51,7 @@ with open(airports_list_txt, 'r') as airports_list:
             for i in range(20):
                 try:
                     # wail until the button is loaded
-                    button = WebDriverWait(driver, 10).until(
+                    button = WebDriverWait(driver, 120).until(
                     EC.element_to_be_clickable((By.CLASS_NAME, 'btn-flights-load'))
                     )
                     # Use JavaScript to click the button because an ad receives the click always
@@ -77,7 +75,7 @@ with open(airports_list_txt, 'r') as airports_list:
                 # For each comment add the airport name and append to reviews list
                 for comment in comments:
                     # Convert the row to a JSON string
-                    message = json.dumps(comment.text.replace(',', ' ') + ',' + airport_name + '\n')
+                    message = json.dumps(comment.text.replace(',', ' ') + ',' + airport_name)
                     # Send the message to a Kafka topic, with a callback for delivery reports
                     producer.produce('reviews_data_topic', value=message, callback=delivery_report)
 
