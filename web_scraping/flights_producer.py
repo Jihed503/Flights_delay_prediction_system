@@ -28,7 +28,11 @@ producer = Producer(conf)
 ##########********************************************************##########
 airports_list_txt = "./web_scraping/all_airports_list.txt"
 
+# Create a new instance of the web browser
+driver = webdriver.Edge()
 
+# Maximize the browser window to full screen
+driver.maximize_window()
 
 # Looping over airports list
 with open(airports_list_txt, 'r') as airports_list:
@@ -39,11 +43,7 @@ with open(airports_list_txt, 'r') as airports_list:
             try:
                 link = airport + '/' + type
 
-                # Create a new instance of the web browser
-                driver = webdriver.Edge()
-
-                # Maximize the browser window to full screen
-                driver.maximize_window()
+                
 
                 # Navigate to the web page
                 driver.get(link)
@@ -124,9 +124,8 @@ with open(airports_list_txt, 'r') as airports_list:
             except:
                 # Print the airport where an error has occured
                 print(airport + '\n')
-            finally:
-                # Close the web browser
-                driver.quit()
+# Close the web browser
+driver.quit()
 
 
 # Wait for any outstanding messages to be delivered and delivery report callbacks to be triggered

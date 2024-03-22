@@ -28,14 +28,16 @@ producer = Producer(conf)
 ##########********************************************************##########
 airports_list_txt = "./web_scraping/all_airports_list.txt"
 
+# Create a new instance of the web browser
+driver = webdriver.Edge()
+
+# Maximize the browser window to full screen
+driver.maximize_window()
+
 # Looping over airports list
 with open(airports_list_txt, 'r') as airports_list:
     for airport in airports_list:
-        # Create a new instance of the web browser
-        driver = webdriver.Edge()
-
-        # Maximize the browser window to full screen
-        driver.maximize_window()
+        
 
         airport_name = list(airport.split('/'))[-1].strip()
 
@@ -95,9 +97,8 @@ with open(airports_list_txt, 'r') as airports_list:
         except:
             # Print the airport where an error has occured
             print(airport + '\n')
-        finally:
-            # Close the web browser
-            driver.quit()
+# Close the web browser
+driver.quit()
 
 
 
