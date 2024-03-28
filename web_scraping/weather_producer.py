@@ -1,3 +1,4 @@
+import time
 from confluent_kafka import Producer
 import json
 from weather import *
@@ -37,7 +38,7 @@ if __name__ == "__main__":
     
     # Looping over airports list
     with open(airports_list_txt, 'r') as airports_list:
-        for airport in airports_list:
+        for i, airport in enumerate(airports_list):
 
             airport_name = list(airport.split('/'))[-1].strip()
 
@@ -45,9 +46,9 @@ if __name__ == "__main__":
             try:
                 # Navigate to the web page
                 driver.get(link)
-
+                if i == 0: time.sleep(30)
                 # Click on the alert button
-                alert_click(driver, 'onetrust-accept-btn-handler')
+                #alert_click(driver, 'onetrust-accept-btn-handler')
 
                 try:
                     # Explicit wait for the table to be present

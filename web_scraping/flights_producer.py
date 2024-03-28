@@ -1,3 +1,4 @@
+import time
 from confluent_kafka import Producer
 import json
 from flights import *
@@ -26,7 +27,7 @@ producer = Producer(conf)
 ##########********************************************************##########
 ##########--------------------Flights Scraping--------------------##########
 ##########********************************************************##########
-airports_list_txt = "./web_scraping/all_airports_list.txt"
+aircrafts_list_txt = "./web_scraping/all_aircrafts_list.txt"
 
 # Create a new instance of the web browser
 driver = webdriver.Edge()
@@ -34,96 +35,76 @@ driver = webdriver.Edge()
 # Maximize the browser window to full screen
 driver.maximize_window()
 
-# Looping over airports list
-with open(airports_list_txt, 'r') as airports_list:
-    for airport in airports_list:
-        airport_name = list(airport.split('/'))[-1].strip()
+# Looping over aircrafts list
+with open(aircrafts_list_txt, 'r') as aircrafts_list:
+    for i, aircraft_link in enumerate(["https://www.flightradar24.com/data/aircraft/c-fyns"]):#enumerate(aircrafts_list):
+        aircraft_registration = list(aircraft_link.split('/'))[-1].strip()
 
-        for type in ['arrivals']:
-            try:
-                link = airport + '/' + type
-
-                
-
-                # Navigate to the web page
-                driver.get(link)
-
-                # Click on the alert button
-                alert_click(driver, 'onetrust-accept-btn-handler')
-                
-                # Load earlier flights
-                while True:
-                    try:
-                        button = WebDriverWait(driver, 30).until(
-                            EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Load earlier flights')]"))
-                        )
-                        # Use JavaScript to click the button because an ad receives the click always
-                        driver.execute_script("arguments[0].click();", button)
-                        
-                    except Exception as e:
-                        # If the button is not found, print a message and continue
-                        print("Load earlier flights button not found, continuing without clicking.\n ",e)
-                        break
-                
-                # Load later flights
-                while True:
-                    try:
-                        WebDriverWait(driver, 30).until(
-                            EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Load later flights')]"))
-                        )
-                        button = driver.find_element(By.XPATH, "//button[contains(text(), 'Load later flights')]")
-                        
-                        # Use JavaScript to click the button because an ad receives the click always
-                        driver.execute_script("arguments[0].click();", button)
-
-                    except Exception as e:
-                        # If the button is not found, print a message and continue
-                        print("Load later flights button not found, continuing without clicking.\n ",e)
-                        break
+        try:
             
+            # Navigate to the web page
+            driver.get(aircraft_link)
+            
+            # Click on the alert button
+            alert_click(driver, 'onetrust-accept-btn-handler')
+
+            if i == 0: time.sleep(30)
+
+            
+            # Load earlier flights
+            while True:
                 try:
-                    # Explicit wait for the table to be present
-                    WebDriverWait(driver, 30).until(
-                        EC.presence_of_element_located((By.TAG_NAME, "tbody"))
+                    button = WebDriverWait(driver, 10).until(
+                        EC.presence_of_element_located((By.CSS_SELECTOR, ".loadButton.loadEarlierFlights.bottomMargin"))
                     )
-                    # Locate the table
-                    table = driver.find_element(By.TAG_NAME, "tbody")
-
-                    if table:
-                        # Find all rows in the table
-                        rows = table.find_elements(By.TAG_NAME, "tr")
-
-                        date = rows[0].find_elements(By.TAG_NAME, "td")[0].text.replace(',', '')
-                        # Loop through rows
-                        for row in rows[1:]:
-                            # Find all cells within the row
-                            cells = row.find_elements(By.TAG_NAME, "td")  
-                            if len(cells)>1:  # Rows with cells
-                                line_list = [cell.text for cell in cells]
-                                if line_list[-1] != "Scheduled":
-                                    ########----------------------------Producer----------------------------########
-                                    # Convert the row to a JSON string
-                                    message = json.dumps(airport_name + ',' + ','.join(line_list) + ',' + date + ',' + type + '\n')
-                                    # Send the message to a Kafka topic, with a callback for delivery reports
-                                    producer.produce('flights_data_topic', value=message, callback=delivery_report)
-
-                                    # Trigger any available delivery report callbacks from previous produce() calls
-                                    producer.poll(0)
-                            else: 
-                                #file.write(cells[0].text.replace(',', '') + '\n') # Write the date
-                                date = cells[0].text.replace(',', '')
-
-                except NoSuchElementException as e:
-                    print(f"Element not found: {e}")
-                except TimeoutException as e:
-                    print(f"Timeout waiting for element: {e}")
+                    # Use JavaScript to click the button because an ad receives the click always
+                    driver.execute_script("arguments[0].click();", button)
+                    time.sleep(3)
+                    
                 except Exception as e:
-                    print(f"An error occurred: {e}")
-                finally: continue
+                    # If the button is not found, print a message and continue
+                    print("Load earlier flights button not found, continuing without clicking.\n ",e)
+                    break
+        
+            try:
+                # Explicit wait for the table to be present
+                WebDriverWait(driver, 30).until(
+                    EC.presence_of_element_located((By.TAG_NAME, "tbody"))
+                )
+                # Locate the table
+                table = driver.find_element(By.TAG_NAME, "tbody")
 
-            except:
-                # Print the airport where an error has occured
-                print(airport + '\n')
+                if table:
+                    # Find all rows in the table
+                    rows = table.find_elements(By.TAG_NAME, "tr")
+
+                    date = rows[0].find_elements(By.TAG_NAME, "td")[0].text.replace(',', '')
+                    # Loop through rows
+                    for row in rows:
+                        # Find all cells within the row
+                        cells = row.find_elements(By.TAG_NAME, "td")  
+                        line_list = [cell.text for cell in cells]
+                        if line_list[-3] != "Scheduled":
+                            ########----------------------------Producer----------------------------########
+                            # Convert the row to a JSON string
+                            message = json.dumps(aircraft_registration + ',' + ','.join(line_list) + '\n')
+                            # Send the message to a Kafka topic, with a callback for delivery reports
+                            producer.produce('flights_data_topic', value=message.encode('utf-8'), callback=delivery_report)
+
+                            # Trigger any available delivery report callbacks from previous produce() calls
+                            producer.poll(0)
+
+            except NoSuchElementException as e:
+                print(f"Element not found: {e}")
+            except TimeoutException as e:
+                print(f"Timeout waiting for element: {e}")
+            except Exception as e:
+                print(f"An error occurred: {e}")
+            finally: continue
+
+        except:
+            # Print the aircraft where an error has occured
+            print(aircraft_registration + '\n')
 # Close the web browser
 driver.quit()
 
