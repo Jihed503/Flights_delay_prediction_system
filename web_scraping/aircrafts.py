@@ -100,7 +100,8 @@ def aircrafts_info():
         # Extract the href attribute from each link
         urls = [link.get_attribute('href') for link in matching_links]  
 
-        for url in urls[6:]:
+        for url in urls:
+                    
             driver.get(url)
 
             # Explicit wait for the table to be present
