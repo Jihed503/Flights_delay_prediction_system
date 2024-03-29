@@ -37,7 +37,7 @@ driver.maximize_window()
 
 # Looping over aircrafts list
 with open(aircrafts_list_txt, 'r') as aircrafts_list:
-    for i, aircraft_link in enumerate(["https://www.flightradar24.com/data/aircraft/c-fyns"]):#enumerate(aircrafts_list):
+    for i, aircraft_link in enumerate(aircrafts_list):
         aircraft_registration = list(aircraft_link.split('/'))[-1].strip()
 
         try:
@@ -52,14 +52,14 @@ with open(aircrafts_list_txt, 'r') as aircrafts_list:
 
             
             # Load earlier flights
-            while True:
+            for _ in range(40):
                 try:
                     button = WebDriverWait(driver, 10).until(
                         EC.presence_of_element_located((By.CSS_SELECTOR, ".loadButton.loadEarlierFlights.bottomMargin"))
                     )
                     # Use JavaScript to click the button because an ad receives the click always
                     driver.execute_script("arguments[0].click();", button)
-                    time.sleep(3)
+                    time.sleep(4)
                     
                 except Exception as e:
                     # If the button is not found, print a message and continue
