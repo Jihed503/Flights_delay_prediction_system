@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 import time
 from confluent_kafka import Producer
 import json
@@ -38,62 +39,68 @@ if __name__ == "__main__":
     
     # Looping over airports list
     with open(airports_list_txt, 'r') as airports_list:
-        for i, airport in enumerate(airports_list):
+        for airport in airports_list:
 
             airport_name = list(airport.split('/'))[-1].strip()
 
-            link = airport + '/weather'
-            try:
-                # Navigate to the web page
-                driver.get(link)
-                if i == 0: time.sleep(30)
-                # Click on the alert button
-                #alert_click(driver, 'onetrust-accept-btn-handler')
+            # Calculate the start and end dates for the last year
+            end_date = datetime.now()
+            start_date = datetime(2023, 11, 27) #end_date - timedelta(days=365)
 
-                try:
-                    # Explicit wait for the table to be present
-                    WebDriverWait(driver, 10).until(
-                        EC.presence_of_element_located((By.TAG_NAME, "tbody"))
-                    )
+            # Current date for the loop, starting from start_date
+            current_date = start_date
 
-                    # Find all the 'tr' elements with class 'slave'
-                    slave_rows = driver.find_elements(By.CSS_SELECTOR, 'tr.slave')
-
-                    # Find all the 'tr' elements with class 'master'
-                    master_rows = driver.find_elements(By.CSS_SELECTOR, 'tr.master')
-                    
-                    # For each 'slave' row, find the 'li' elements and extract their text
-                    for i in range(len(slave_rows)):
-                        # Since the 'li' elements are hidden, we may need to make them visible first
-                        # This JavaScript snippet will change the display style of the parent 'ul'
-                        driver.execute_script("arguments[0].style.display = 'block';", slave_rows[i])
-        
-                        # Now find all the 'li' elements within this 'row'
-                        list_items = slave_rows[i].find_elements(By.TAG_NAME, 'li')
-        
-                        # Extract the text from each 'li' element
-                        list_contents = [item.text for item in list_items] + [' '.join(master_rows[i].text.split(' ')[-1:-3:-1])] + [airport_name]
-
-                        ########----------------------------Producer----------------------------########
-                        # Convert the row to a JSON string
-                        message = json.dumps(list_contents)
-                        # Send the message to a Kafka topic, with a callback for delivery reports
-                        producer.produce('weather_data_topic', value=message, callback=delivery_report)
-
-                        # Trigger any available delivery report callbacks from previous produce() calls
-                        producer.poll(0)                     
-                    
-                except NoSuchElementException as e:
-                    print(f"Element not found: {e}")
-                except TimeoutException as e:
-                    print(f"Timeout waiting for element: {e}")
-                except Exception as e:
-                    print(f"An error occurred: {e}")
-                finally: continue
+            while current_date  <= end_date:
+                # Format the URL with the correct year and month
+                link = f"https://www.wunderground.com/history/daily/{airport_name}/date/{current_date.year}-{current_date.month}-{current_date.day}"
                 
-            except:
-                # Print the airport where an error has occured
-                print(airport + '\n')
+                try:
+                    # Navigate to the web page
+                    driver.get(link)
+                    
+
+                    try:
+                        # Explicit wait for the table to be present
+                        table = WebDriverWait(driver, 10).until(
+                            EC.presence_of_element_located((By.XPATH, '//table[@aria-labelledby="History observation"]'))
+                        )
+
+                        if table:
+                            # Extract all rows from the table
+                            rows = table.find_elements(By.TAG_NAME, 'tr')
+                            
+                            # Loop through rows
+                            for row in rows:
+                                # Find all cells within the row
+                                cells = row.find_elements(By.TAG_NAME, "td")  
+                                line_list = [cell.text for cell in cells] + [airport_name] + [current_date]
+                                
+                                ########----------------------------Producer----------------------------########
+                                # Convert the row to a JSON string
+                                message = json.dumps(line_list, default=str)
+                                # Send the message to a Kafka topic, with a callback for delivery reports
+                                producer.produce('weather_data_topic', value=message, callback=delivery_report)
+
+                                # Trigger any available delivery report callbacks from previous produce() calls
+                                producer.poll(0)      
+                        else:
+                            break              
+                        
+                    except NoSuchElementException as e:
+                        print(f"Element not found: {e}")
+                    except TimeoutException as e:
+                        print(f"Timeout waiting for element: {e}")
+                    except Exception as e:
+                        print(f"An error occurred: {e}")
+                except KeyboardInterrupt:
+                    exit()
+                except:
+                    # Print the airport where an error has occured
+                    print(airport + '\n')
+                    
+                # Increment the current_date by one day
+                current_date += timedelta(days=1)
+            
     # Close the web browser
     driver.quit()
 

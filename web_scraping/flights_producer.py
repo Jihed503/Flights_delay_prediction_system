@@ -101,7 +101,8 @@ with open(aircrafts_list_txt, 'r') as aircrafts_list:
             except Exception as e:
                 print(f"An error occurred: {e}")
             finally: continue
-
+        except KeyboardInterrupt:
+            exit()
         except:
             # Print the aircraft where an error has occured
             print(aircraft_registration + '\n')
