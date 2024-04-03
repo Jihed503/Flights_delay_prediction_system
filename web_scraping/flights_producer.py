@@ -48,8 +48,35 @@ with open(aircrafts_list_txt, 'r') as aircrafts_list:
             # Click on the alert button
             alert_click(driver, 'onetrust-accept-btn-handler')
 
-            if i == 0: time.sleep(30)
+            ###########################Login###########################
+            if i==0:
+                username = 'iheb.benjeddi9573@gmail.com'
+                password = 'IHEBjihedAziz2024!!?'
 
+                try:
+                    button = WebDriverWait(driver, 10).until(
+                        EC.presence_of_element_located((By.ID, "auth-button"))
+                    )
+                    # Use JavaScript to click the button because an ad receives the click always
+                    driver.execute_script("arguments[0].click();", button)
+                except Exception as e:
+                    # If the button is not found, print a message and continue
+                    print("Login button not found.\n ",e)
+                
+                # Find the username/email field and send the username
+                username_field = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.NAME, 'email')))
+                username_field.send_keys(username)
+
+                # Find the password field and send the password
+                password_field = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.NAME, 'props.name')))
+                password_field.send_keys(password)
+
+                time.sleep(2)
+
+                # Find the login button and click it
+                #login_button = driver.find_element_by_xpath("//button[contains(text(), 'Log in with email')]") 
+                login_button = driver.find_element(By.CSS_SELECTOR, "button.w-full")
+                driver.execute_script("arguments[0].click();", login_button)
             
             # Load earlier flights
             for _ in range(40):
@@ -105,7 +132,7 @@ with open(aircrafts_list_txt, 'r') as aircrafts_list:
             exit()
         except:
             # Print the aircraft where an error has occured
-            print(aircraft_registration + '\n')
+            print(aircraft_registration + '***************************************************' + '\n')
 # Close the web browser
 driver.quit()
 

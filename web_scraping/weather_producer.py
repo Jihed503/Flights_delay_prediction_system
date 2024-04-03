@@ -45,11 +45,11 @@ if __name__ == "__main__":
 
             # Calculate the start and end dates for the last year
             end_date = datetime.now()
-            start_date = datetime(2023, 11, 27) #end_date - timedelta(days=365)
+            start_date = end_date - timedelta(days=365) #  datetime(2023, 8, 28) # 
 
             # Current date for the loop, starting from start_date
             current_date = start_date
-
+            
             while current_date  <= end_date:
                 # Format the URL with the correct year and month
                 link = f"https://www.wunderground.com/history/daily/{airport_name}/date/{current_date.year}-{current_date.month}-{current_date.day}"
@@ -57,46 +57,39 @@ if __name__ == "__main__":
                 try:
                     # Navigate to the web page
                     driver.get(link)
+
+                    # Explicit wait for the table to be present
+                    table = WebDriverWait(driver, 10).until(
+                        EC.presence_of_element_located((By.XPATH, '//table[@aria-labelledby="History observation"]'))
+                    )
+
+                    # Extract all rows from the table
+                    rows = table.find_elements(By.TAG_NAME, 'tr')
                     
-
-                    try:
-                        # Explicit wait for the table to be present
-                        table = WebDriverWait(driver, 10).until(
-                            EC.presence_of_element_located((By.XPATH, '//table[@aria-labelledby="History observation"]'))
-                        )
-
-                        if table:
-                            # Extract all rows from the table
-                            rows = table.find_elements(By.TAG_NAME, 'tr')
-                            
-                            # Loop through rows
-                            for row in rows:
-                                # Find all cells within the row
-                                cells = row.find_elements(By.TAG_NAME, "td")  
-                                line_list = [cell.text for cell in cells] + [airport_name] + [current_date]
-                                
-                                ########----------------------------Producer----------------------------########
-                                # Convert the row to a JSON string
-                                message = json.dumps(line_list, default=str)
-                                # Send the message to a Kafka topic, with a callback for delivery reports
-                                producer.produce('weather_data_topic', value=message, callback=delivery_report)
-
-                                # Trigger any available delivery report callbacks from previous produce() calls
-                                producer.poll(0)      
-                        else:
-                            break              
+                    # Loop through rows
+                    for row in rows:
+                        # Find all cells within the row
+                        cells = row.find_elements(By.TAG_NAME, "td")  
+                        line_list = [cell.text for cell in cells] + [airport_name] + [current_date]
                         
-                    except NoSuchElementException as e:
-                        print(f"Element not found: {e}")
-                    except TimeoutException as e:
-                        print(f"Timeout waiting for element: {e}")
-                    except Exception as e:
-                        print(f"An error occurred: {e}")
+                        ########----------------------------Producer----------------------------########
+                        # Convert the row to a JSON string
+                        message = json.dumps(line_list, default=str)
+                        # Send the message to a Kafka topic, with a callback for delivery reports
+                        producer.produce('weather_data_topic', value=message, callback=delivery_report)
+
+                        # Trigger any available delivery report callbacks from previous produce() calls
+                        producer.poll(0)                 
+                        
+                except NoSuchElementException as e:
+                    print(f"Element not found: {e}")
+                except TimeoutException as e:
+                    print(f"Timeout waiting for element: {e}")
+                    break
                 except KeyboardInterrupt:
                     exit()
-                except:
-                    # Print the airport where an error has occured
-                    print(airport + '\n')
+                except Exception as e:
+                    print(f"An error occurred: {e}")
                     
                 # Increment the current_date by one day
                 current_date += timedelta(days=1)
