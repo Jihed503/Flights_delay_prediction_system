@@ -1,5 +1,3 @@
-https://www.flightradar24.com/data/airports/hoh
-https://www.flightradar24.com/data/airports/saw
 https://www.flightradar24.com/data/airports/ord
 https://www.flightradar24.com/data/airports/arn
 https://www.flightradar24.com/data/airports/svo

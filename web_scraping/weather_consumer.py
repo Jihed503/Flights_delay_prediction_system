@@ -51,7 +51,7 @@ try:
             
 
 except KeyboardInterrupt:
-    pass
+    exit()
 finally:
     # Close down consumer to commit final offsets.
     consumer.close()

@@ -35,7 +35,7 @@ try:
             with open('./data/history/flights.csv', 'a', encoding="utf-8") as file:
                 file.write(data)
 except KeyboardInterrupt:
-    pass
+    exit()
 finally:
     # Close down consumer to commit final offsets.
     consumer.close()

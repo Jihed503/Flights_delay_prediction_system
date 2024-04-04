@@ -35,7 +35,7 @@ try:
             with open('./data/history/reviews.csv', 'a', encoding="utf-8") as file:
                 file.write(data + '\n')
 except KeyboardInterrupt:
-    pass
+    exit()
 finally:
     # Close down consumer to commit final offsets.
     consumer.close()
