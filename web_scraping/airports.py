@@ -1,4 +1,5 @@
 import re
+import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
@@ -154,13 +155,43 @@ def airports_info():
     # Setup WebDriver using Edge
     driver = webdriver.Edge()
     driver.maximize_window()
-    with open('./web_scraping/all_airports_list.txt', 'r') as file:
+    with open('./web_scraping/scraped_airports.txt', 'r') as file:
         try:
-            for airport_link in file:
+            for i, airport_link in enumerate(file):
                 # Navigate to the airport's main page
                 driver.get(airport_link)
                 
                 alert_click(driver, 'onetrust-accept-btn-handler')
+                
+                ###########################Login###########################
+                if i==0:
+                    username = 'iheb.benjeddi9573@gmail.com'
+                    password = 'IHEBjihedAziz2024!!?'
+
+                    try:
+                        button = WebDriverWait(driver, 10).until(
+                            EC.presence_of_element_located((By.ID, "auth-button"))
+                        )
+                        # Use JavaScript to click the button because an ad receives the click always
+                        driver.execute_script("arguments[0].click();", button)
+                    except Exception as e:
+                        # If the button is not found, print a message and continue
+                        print("Login button not found.\n ",e)
+                    
+                    # Find the username/email field and send the username
+                    username_field = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.NAME, 'email')))
+                    username_field.send_keys(username)
+
+                    # Find the password field and send the password
+                    password_field = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.NAME, 'props.name')))
+                    password_field.send_keys(password)
+
+                    time.sleep(2)
+
+                    # Find the login button and click it
+                    #login_button = driver.find_element_by_xpath("//button[contains(text(), 'Log in with email')]") 
+                    login_button = driver.find_element(By.CSS_SELECTOR, "button.w-full")
+                    driver.execute_script("arguments[0].click();", login_button)
 
                 airport_info = []
                 try:

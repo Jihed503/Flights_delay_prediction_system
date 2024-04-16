@@ -40,12 +40,11 @@ if __name__ == "__main__":
     # Looping over airports list
     with open(airports_list_txt, 'r') as airports_list:
         for airport in airports_list:
-
             airport_name = list(airport.split('/'))[-1].strip()
 
             # Calculate the start and end dates for the last year
-            end_date = datetime.now()
-            start_date = end_date - timedelta(days=365) #  datetime(2023, 11, 15) #  
+            end_date = datetime.now() # datetime(2024, 1, 30) #
+            start_date = datetime(2023, 8, 13) # end_date - timedelta(days=365) 
 
             # Current date for the loop, starting from start_date
             current_date = start_date
