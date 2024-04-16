@@ -1,9 +1,7 @@
 /web_scraping/scrape.py
 /web_scraping/scraped_aircrafts.txt
 /web_scraping/scraped_airports.txt
-/data/flights_one_million
-/data/flights2015
 /venv
 /.ipynb_checkpoints
 processing.pdf
-/data/processed/flights/flights.csv
+/data
