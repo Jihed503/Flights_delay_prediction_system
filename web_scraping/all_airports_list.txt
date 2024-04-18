@@ -1,5 +1,3 @@
-https://www.flightradar24.com/data/airports/cdg
-https://www.flightradar24.com/data/airports/phx
 https://www.flightradar24.com/data/airports/den
 https://www.flightradar24.com/data/airports/ebu
 https://www.flightradar24.com/data/airports/sxb
@@ -22,6 +20,7 @@ https://www.flightradar24.com/data/airports/bmk
 https://www.flightradar24.com/data/airports/bwe
 https://www.flightradar24.com/data/airports/bre
 https://www.flightradar24.com/data/airports/cgn
+https://www.flightradar24.com/data/airports/tun
 https://www.flightradar24.com/data/airports/dtm
 https://www.flightradar24.com/data/airports/drs
 https://www.flightradar24.com/data/airports/mgl
@@ -504,7 +503,6 @@ https://www.flightradar24.com/data/airports/mir
 https://www.flightradar24.com/data/airports/sfa
 https://www.flightradar24.com/data/airports/tbj
 https://www.flightradar24.com/data/airports/toe
-https://www.flightradar24.com/data/airports/tun
 https://www.flightradar24.com/data/airports/ada
 https://www.flightradar24.com/data/airports/esb
 https://www.flightradar24.com/data/airports/hty

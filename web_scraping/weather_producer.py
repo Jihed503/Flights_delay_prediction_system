@@ -17,7 +17,8 @@ def delivery_report(err, msg):
     if err is not None:
         print('Message delivery failed: {}'.format(err))
     else:
-        print('Message delivered to {} [{}]'.format(msg.topic(), msg.partition()))
+        message_str = msg.value().decode('utf-8') if isinstance(msg.value(), bytes) else str(msg.value())
+        print('Message delivered to {} [{}] {}'.format(msg.topic(), msg.partition(), message_str.split(',')[-1]))
 
 if __name__ == "__main__":
     # Producer configuration
@@ -44,7 +45,7 @@ if __name__ == "__main__":
 
             # Calculate the start and end dates for the last year
             end_date = datetime.now() # datetime(2024, 1, 30) #
-            start_date = datetime(2023, 8, 13) # end_date - timedelta(days=365) 
+            start_date = end_date - timedelta(days=365)  # datetime(2023, 8, 27) # 
 
             # Current date for the loop, starting from start_date
             current_date = start_date
