@@ -4,4 +4,6 @@
 /venv
 /.ipynb_checkpoints
 processing.pdf
-/data
+data/flights_one_million/
+data/flights_tun_2016/
+data/flights2015/

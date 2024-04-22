@@ -1,5 +1,3 @@
-https://www.flightradar24.com/data/airports/den
-https://www.flightradar24.com/data/airports/ebu
 https://www.flightradar24.com/data/airports/sxb
 https://www.flightradar24.com/data/airports/lde
 https://www.flightradar24.com/data/airports/tln
