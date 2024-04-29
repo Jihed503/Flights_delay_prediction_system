@@ -1,7 +1,3 @@
-https://www.flightradar24.com/data/airports/tuf
-https://www.flightradar24.com/data/airports/lbv
-https://www.flightradar24.com/data/airports/bjl
-https://www.flightradar24.com/data/airports/bus
 https://www.flightradar24.com/data/airports/kut
 https://www.flightradar24.com/data/airports/tbs
 https://www.flightradar24.com/data/airports/aoc

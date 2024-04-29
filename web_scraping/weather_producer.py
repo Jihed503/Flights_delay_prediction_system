@@ -45,7 +45,7 @@ if __name__ == "__main__":
 
             # Calculate the start and end dates for the last year
             end_date = datetime.now() # datetime(2024, 1, 30) #
-            start_date = end_date - timedelta(days=365)  # datetime(2023, 8, 27) # 
+            start_date = datetime(2024, 1, 3) # end_date - timedelta(days=365)  # 
 
             # Current date for the loop, starting from start_date
             current_date = start_date
