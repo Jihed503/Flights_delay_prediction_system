@@ -1,8 +1,3 @@
-https://www.flightradar24.com/data/airports/kut
-https://www.flightradar24.com/data/airports/tbs
-https://www.flightradar24.com/data/airports/aoc
-https://www.flightradar24.com/data/airports/qca
-https://www.flightradar24.com/data/airports/agb
 https://www.flightradar24.com/data/airports/qcb
 https://www.flightradar24.com/data/airports/ber
 https://www.flightradar24.com/data/airports/bbj
