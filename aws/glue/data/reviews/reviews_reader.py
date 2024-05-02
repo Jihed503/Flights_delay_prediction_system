@@ -13,7 +13,7 @@ from .reviews_schema import (
 N_APPLIC_INFQ_VALUE = 38
 
 
-class REVIEWSsReader:
+class ReviewsReader:
     def __init__(self, path: str) -> None:
 
         self.path = path

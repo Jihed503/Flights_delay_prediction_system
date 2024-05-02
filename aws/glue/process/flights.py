@@ -9,22 +9,15 @@ from ..common.s3 import write_to_parquet
 from ..config.config import app_config
 from ..data.joined_flights.joined_flights_schema import JOINED_FLIGHTS_SCHEMA
 from ..data.flights.flights_reader import FlightsReader
-from ..data.airports_info.airports_info_reader import AirportsInfoReader
+from ..data.airports_info.airports_info_reader import AirportsReader
 from ..data.aircrafts_info.aircrafts_info_reader import AircraftsReader
 from ..data.reviews.reviews_reader import ReviewsReader
 from ..data.weather.weather_reader import WeatherReader
 
 '''
 from ..data.flights.airports_info_schema import N_FIN_PLAN
-from ..data.flights.flights_reader import (
-    FiplFinancialPlanReader,
-)
-from reporting_tool.data.flights.flights_schema import (
-    C_IDENT_VAL,
-)
-from reporting_tool.data.reviews.reviews_redar import ReviewsReader
+from reporting_tool.data.flights.flights_schema import C_IDENT_VAL
 from reporting_tool.data.reviews.reviews_schema import C_IDENT_NATURE
-from reporting_tool.data.aircrafts.aircrafts_reader import AircraftsReader
 '''
 
 class FlightsJob:
@@ -77,7 +70,7 @@ class FlightsJob:
         return flights
 
     def _get_data_from_airports_info(self, path: str) -> DataFrame:
-        airports_info_reader: AirportsInfoReader = AirportsInfoReader(path)
+        airports_info_reader: AirportsReader = AirportsReader(path)
         airports_info = airports_info_reader.read()
         return airports_info
 
@@ -105,18 +98,22 @@ class FlightsJob:
         weather_df: DataFrame
     ) -> DataFrame:
         
-        joined_flights = (
+        flights_df: DataFrame = self._process_flights(flights_df)
+        airports_info: DataFrame = self._process_airports_info(airports_info)
+        aircrafts_df: DataFrame = self._process_aircrafts_info(aircrafts_df)
+        reviews_df: DataFrame = self._process_reviews(reviews_df)
+        weather_df: DataFrame = self._process_weather(weather_df)
+
+        joined_flights: DataFrame = (
             (
-                airports_info.join(
-                    flights_df, [C_IDENT_VAL, N_FIN_PLAN]
-                )
-                .join(aircrafts_df, C_IDENT_VAL)
-                .join(reviews_df, C_IDENT_NATURE)
+                flights_df.join(weather_df, ["rounded_hour", "airport"], "left")
+                .join(airports_info, ["airport"], "left").drop("time_diff")
+                .join(aircrafts_df, ["aircraft"], "left")
             )
             .distinct()
             .select(*JOINED_FLIGHTS_SCHEMA.fieldNames())
         )
-        return actifs_df
+        return joined_flights
     
     def _process_flights(self, flights_df: DataFrame) -> DataFrame:
         """
@@ -363,7 +360,7 @@ class FlightsJob:
         weather_df = weather_df.withColumn("rounded_hour", to_timestamp(datetime_str, "yyyy-MM-dd HH:mm:ss")).drop('date')
         
         # Drop duplicate rounded_hour
-        weather_df = weather_df.dropDuplicates(['rounded_hour'])
+        weather_df = weather_df.dropDuplicates(['airport', 'rounded_hour'])
         '''
         # Join the airports_info data with the aggregated weather data
         weather_df = weather_df.join(info_df, "airport", "left")

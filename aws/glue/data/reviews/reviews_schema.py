@@ -4,7 +4,7 @@ from pyspark.sql.types import StringType, StructField, StructType
 
 
 
-# flights fields
+# reviews fields
 COMMENT: str = "comment"
 AIRPORT: str = "airport"
 

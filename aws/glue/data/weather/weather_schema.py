@@ -30,7 +30,7 @@ PREFIX_PATH_FLIGHTS: str = (
 )
 '''
 
-FLIGHTS_SCHEMA: StructType = StructType(
+WEATHER_SCHEMA: StructType = StructType(
     [
         StructField(AIRCRAFT, StringType()),
         StructField(TEMP1, StringType()),
