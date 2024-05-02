@@ -7,5 +7,7 @@ processing.pdf
 data/flights_one_million/
 data/flights_tun_2016/
 data/flights2015/
+data/history/
+data/processed/
 config.py
 aws/glue_test/
