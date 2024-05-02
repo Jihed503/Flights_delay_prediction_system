@@ -50,7 +50,7 @@ FLIGHTS_SCHEMA: StructType = StructType(
 )
 
 
-def build_flights(
+def build_joined_flights(
         aircraft: str,
         temp1: str,
         temp2: str,

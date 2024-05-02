@@ -4,8 +4,8 @@ from ...common.reader import (
     read_from_parquet,
 )
 from ...context.context import logger
-from .flights_schema import (
-    FLIGHTS_SCHEMA,
+from .airports_info_schema import (
+    AIRPORTS_INFO_SCHEMA,
 
     PREFIX_PATH_FLIGHTS,
 )
@@ -13,18 +13,18 @@ from .flights_schema import (
 N_APPLIC_INFQ_VALUE = 38
 
 
-class FlightsReader:
+class AirportsReader:
     def __init__(self, path: str) -> None:
 
         self.path = path
 
     def read(self) -> DataFrame:
         logger.info("start reading table")
-        flights_df: DataFrame = read_from_parquet(
+        airports_info_df: DataFrame = read_from_parquet(
             self.path
-        ).select(*FLIGHTS_SCHEMA.fieldNames())
+        ).select(*AIRPORTS_INFO_SCHEMA.fieldNames())
 
         return create_df_with_schema(
-            flights_df,
-            FLIGHTS_SCHEMA,
+            airports_info_df,
+            AIRPORTS_INFO_SCHEMA,
         )
