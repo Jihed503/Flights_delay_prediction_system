@@ -8,3 +8,4 @@ data/flights_one_million/
 data/flights_tun_2016/
 data/flights2015/
 config.py
+aws/glue_test/

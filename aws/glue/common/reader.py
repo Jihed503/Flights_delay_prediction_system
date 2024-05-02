@@ -50,4 +50,4 @@ def create_df_with_schema(df: DataFrame, schema: StructType) -> DataFrame:
 
 def read_from_csv_with_header(csv_file_path: str) -> DataFrame:
     """Read a csv file and ignore his header."""
-    return spark.read.option("header", True).option("delimiter",";").csv(csv_file_path)
+    return spark.read.option("header", True).option("delimiter",",").csv(csv_file_path)
