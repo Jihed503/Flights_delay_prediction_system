@@ -1,6 +1,6 @@
 from enum import Enum
 from typing import List, Set
-from ..config.config import ACCESS_KEY_ID, SECRET_ACCESS_KEY
+from glue.config.config import ACCESS_KEY_ID, SECRET_ACCESS_KEY
 
 import boto3
 from botocore.response import StreamingBody

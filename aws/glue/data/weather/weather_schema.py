@@ -4,7 +4,7 @@ from pyspark.sql.types import StringType, StructField, StructType
 
 
 
-# flights fields
+# weather fields
 AIRCRAFT: str = "aircraft"
 TEMP1: str = "temp1"
 TEMP2: str = "temp2"

@@ -5,17 +5,17 @@ from pyspark.sql.functions import col, concat, lit, split, expr, to_date, to_tim
 from pyspark.sql.types import IntegerType, FloatType
 from pyspark.sql import DataFrame
 
-from ..common.s3 import write_to_parquet
-from ..config.config import app_config
-from ..data.joined_flights.joined_flights_schema import JOINED_FLIGHTS_SCHEMA
-from ..data.flights.flights_reader import FlightsReader
-from ..data.airports_info.airports_info_reader import AirportsReader
-from ..data.aircrafts_info.aircrafts_info_reader import AircraftsReader
-from ..data.reviews.reviews_reader import ReviewsReader
-from ..data.weather.weather_reader import WeatherReader
+from glue.common.s3 import write_to_parquet
+from glue.config.config import app_config
+from glue.data.joined_flights.joined_flights_schema import JOINED_FLIGHTS_SCHEMA
+from glue.data.flights.flights_reader import FlightsReader
+from glue.data.airports_info.airports_info_reader import AirportsReader
+from glue.data.aircrafts_info.aircrafts_info_reader import AircraftsReader
+from glue.data.reviews.reviews_reader import ReviewsReader
+from glue.data.weather.weather_reader import WeatherReader
 
 '''
-from ..data.flights.airports_info_schema import N_FIN_PLAN
+from glue.data.flights.airports_info_schema import N_FIN_PLAN
 from reporting_tool.data.flights.flights_schema import C_IDENT_VAL
 from reporting_tool.data.reviews.reviews_schema import C_IDENT_NATURE
 '''

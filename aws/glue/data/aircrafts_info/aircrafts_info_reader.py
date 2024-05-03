@@ -1,9 +1,9 @@
 from pyspark.sql import DataFrame
-from ...common.reader import (
+from glue.common.reader import (
     create_df_with_schema,
     read_from_parquet,
 )
-from ...context.context import logger
+from glue.context.context import logger
 from .aircrafts_info_schema import (
     AIRCRAFTS_INFO_SCHEMA,
 

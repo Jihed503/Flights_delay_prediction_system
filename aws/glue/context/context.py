@@ -1,5 +1,5 @@
 import sys
-from ..config.config import ACCESS_KEY_ID, SECRET_ACCESS_KEY
+from glue.config.config import ACCESS_KEY_ID, SECRET_ACCESS_KEY
 
 try:
     from awsglue.context import GlueContext
