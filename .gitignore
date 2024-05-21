@@ -7,3 +7,4 @@ processing.pdf
 data/
 config.py
 aws/glue_test/
+/classified_comments.csv
