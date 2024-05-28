@@ -9,3 +9,4 @@ config.py
 aws/glue_test/
 aws/glue.zip
 /classified_comments.csv
+modeling/data_to_predict/data/

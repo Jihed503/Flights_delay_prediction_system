@@ -10,10 +10,8 @@ def flights_scraping():
     Returns:
     - A list of flight details, including airport name, date, and flight status.
     '''
-
+    
     airports_list_txt = "all_airports_list.txt"
-
-    flights = []
 
     # Looping over airports list
     with open(airports_list_txt, 'r') as airports_list:
@@ -35,20 +33,6 @@ def flights_scraping():
 
                     # Click on the alert button
                     alert_click(driver, 'onetrust-accept-btn-handler')
-                    
-                    # Load earlier flights
-                    while True:
-                        try:
-                            button = WebDriverWait(driver, 30).until(
-                                EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Load earlier flights')]"))
-                            )
-                            # Use JavaScript to click the button because an ad receives the click always
-                            driver.execute_script("arguments[0].click();", button)
-                            
-                        except Exception as e:
-                            # If the button is not found, print a message and continue
-                            print("Load earlier flights button not found, continuing without clicking.\n ",e)
-                            break
                     
                     # Load later flights
                     while True:
@@ -117,24 +101,3 @@ if __name__ == "__main__":
     with open('flights.csv', 'a') as file:
         for row in flights:
             file.write(row)
-    
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
