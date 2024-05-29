@@ -3,7 +3,7 @@ import os
 import shutil
 
 # Define the base directory for partitioned data
-base_dir = "data/flights/spark_output/"
+base_dir = "data/weather/spark_output/" # flights or weather
 
 # Initialize Spark session
 spark = SparkSession.builder \

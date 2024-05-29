@@ -19,12 +19,37 @@ def search_flights():
 
     # Call prediction model to get flight predictions
     flights = predict_flight_delays(departure_city, destination, start_date, end_date)
-
+    
     # Sort flights by expected delay time
     #sorted_flights = sorted(flights, key=lambda x: x['delay_time'])
 
+    # Ensure flights data is serializable to JSON
+    serializable_flights = []
+    for flight in flights:
+        try:
+            serializable_flights.append({
+                "date": flight["scheduled_time_departure"],
+                "from_city": flight["from_city"],
+                "to_city": flight["to_city"],
+                "aircraft": flight["aircraft"],
+                "flight_time": flight["flight_time"],
+                "scheduled_time_departure": flight["scheduled_time_departure"],
+                "actual_time_departure": flight["actual_time_departure"],
+                "scheduled_time_arrival": flight["scheduled_time_arrival"],
+                "status": flight["status"],
+                "temperature": flight["temperature"],
+                "wind_direction": flight["wind_direction"],
+                "wind_speed": flight["wind_speed"],
+                "humidity": flight["humidity"],
+                "cloud_cover": flight["cloud_cover"],
+                "precip": flight["precip"]
+            })
+        except Exception as e:
+            print(f"Error serializing flight data: {e}")
+            continue
+    print(serializable_flights)
     # Return sorted flights as JSON response
-    return jsonify(flights)
+    return jsonify(serializable_flights)
 
 if __name__ == '__main__':
     app.run(debug=True)

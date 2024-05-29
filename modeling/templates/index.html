@@ -1,104 +1,36 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Réservation de Vols</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
-        .header {
-            background-color: #333;
-            color: #fff;
-            padding: 15px 0;
-            text-align: center;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .search-box {
-            background-color: #fff;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
-        }
-        .search-box h2 {
-            margin-top: 0;
-        }
-        .search-box form {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-        .search-box label {
-            flex: 1 1 100%;
-            margin-bottom: 5px;
-        }
-        .search-box input[type="text"],
-        .search-box input[type="date"] {
-            width: calc(33.33% - 20px);
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        .search-box input[type="submit"] {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .search-box input[type="submit"]:hover {
-            background-color: #0056b3;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        table, th, td {
-            border: 1px solid #ccc;
-        }
-        th, td {
-            padding: 10px;
-            text-align: left;
-        }
-        th {
-            background-color: #4aa1fe;
-        }
-    </style>
+    <title>Flight Delay Prediction</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 <body>
-    <div class="header">
-        <h1>Réservation de Vols</h1>
-        <p>Trouvez et réservez des vols optimaux</p>
-    </div>
     <div class="container">
-        <div class="search-box">
-            <h2>Rechercher des Vols</h2>
-            <form id="search-form">
+        <h1 class="mt-5">Rechercher des Vols</h1>
+        <form id="search-form" class="mt-3">
+            <div class="form-group">
                 <label for="departure-city">Ville de départ</label>
-                <input type="text" id="departure-city" name="departure-city" placeholder="Entrez la ville de départ" required>
- 
+                <input type="text" id="departure-city" class="form-control" placeholder="Entrez la ville de départ">
+            </div>
+            <div class="form-group">
                 <label for="destination">Destination</label>
-                <input type="text" id="destination" name="destination" placeholder="Entrez la destination" required>
- 
-                <label for="date-range">Date</label>
-                <input type="date" id="start-date" name="start-date" required>
-                <input type="date" id="end-date" name="end-date" required>
- 
-                <input type="submit" value="Rechercher">
-            </form>
-        </div>
-        <table id="flights-table">
+                <input type="text" id="destination" class="form-control" placeholder="Entrez la destination">
+            </div>
+            <div class="form-group">
+                <label for="start-date">Date de début</label>
+                <input type="date" id="start-date" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="end-date">Date de fin</label>
+                <input type="date" id="end-date" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary">Rechercher</button>
+        </form>
+
+        <h2 class="mt-5">Résultats</h2>
+        <table class="table table-striped" id="results-table">
             <thead>
                 <tr>
                     <th>Date</th>
@@ -113,44 +45,46 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Les données du tableau seront insérées ici -->
+                <!-- Results will be appended here -->
             </tbody>
         </table>
     </div>
- 
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script>
-        document.getElementById('search-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            // Récupérer les valeurs des champs
-            const departureCity = document.getElementById('departure-city').value;
-            const destination = document.getElementById('destination').value;
-            const startDate = document.getElementById('start-date').value;
-            const endDate = document.getElementById('end-date').value;
- 
-            // Appel AJAX pour récupérer les données du backend Flask
-            fetch(`/search?departure-city=${departureCity}&destination=${destination}&start-date=${startDate}&end-date=${endDate}`)
-                .then(response => response.json())
-                .then(data => {
-                    // Insérer les données dans le tableau
-                    const tableBody = document.querySelector('#flights-table tbody');
-                    tableBody.innerHTML = ''; // Vider le tableau avant d'insérer les nouvelles données
- 
-                    data.forEach(flight => {
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
+        $(document).ready(function() {
+            $('#search-form').on('submit', function(event) {
+                event.preventDefault();
+
+                const formData = {
+                    'departure-city': $('#departure-city').val(),
+                    'destination': $('#destination').val(),
+                    'start-date': $('#start-date').val(),
+                    'end-date': $('#end-date').val()
+                };
+
+                $.get('/search', formData, function(data) {
+                    const tableBody = $('#results-table tbody');
+                    tableBody.empty();
+
+                    data.forEach(function(flight) {
+                        const row = `<tr>
                             <td>${flight.date}</td>
-                            <td>${flight.from}</td>
-                            <td>${flight.to}</td>
+                            <td>${flight.from_city}</td>
+                            <td>${flight.to_city}</td>
                             <td>${flight.aircraft}</td>
                             <td>${flight.flight_time}</td>
-                            <td>${flight.std}</td>
-                            <td>${flight.atd}</td>
-                            <td>${flight.sta}</td>
+                            <td>${flight.scheduled_time_departure}</td>
+                            <td>${flight.actual_time_departure}</td>
+                            <td>${flight.scheduled_time_arrival}</td>
                             <td>${flight.status}</td>
-                        `;
-                        tableBody.appendChild(row);
+                        </tr>`;
+                        tableBody.append(row);
                     });
+                }).fail(function(jqXHR, textStatus, errorThrown) {
+                    console.error('Error fetching flight data:', textStatus, errorThrown);
                 });
+            });
         });
     </script>
 </body>

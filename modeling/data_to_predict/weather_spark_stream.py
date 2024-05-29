@@ -1,41 +1,41 @@
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, from_json, regexp_replace, to_timestamp, lit, date_format
-from pyspark.sql.types import StructType, StructField, StringType, IntegerType, FloatType
+from pyspark.sql.functions import col, from_json, regexp_replace, to_timestamp, lit, to_date
+from pyspark.sql.types import StructType, StructField, StringType
 import os
- 
+
 # Define the output directory
 output_dir = "data/weather/spark_output/"
 checkpoint_dir = "data/weather/"
- 
-# Initialiser la session Spark
+
+# Initialize Spark session
 spark = SparkSession.builder \
     .appName("WeatherDataCleaning") \
     .config("spark.sql.streaming.checkpointLocation", checkpoint_dir) \
     .config("spark.sql.legacy.timeParserPolicy", "LEGACY") \
     .getOrCreate()
- 
-# Lire les données de Kafka
+
+# Read data from Kafka
 kafka_df = spark \
     .readStream \
     .format("kafka") \
     .option("kafka.bootstrap.servers", "localhost:9092") \
     .option("subscribe", "rt_weather_data_topic") \
     .load()
- 
-# Convertir les valeurs binaires en chaînes de caractères
+
+# Convert binary values to strings
 kafka_df = kafka_df.selectExpr("CAST(value AS STRING)")
- 
-# Définir le schéma pour les données météorologiques
+
+# Define schema for weather data
 weather_schema = StructType([
     StructField("date", StringType(), True),
     StructField("hour", StringType(), True),
     StructField("details", StringType(), True)
 ])
- 
-# Appliquer le schéma et séparer la chaîne CSV en colonnes
+
+# Apply schema and separate the CSV string into columns
 weather_df = kafka_df.select(from_json(col("value"), weather_schema).alias("parsed_value")).select("parsed_value.*")
- 
-# Définir le schéma des détails
+
+# Define schema for details
 details_schema = StructType([
     StructField("feels_like", StringType(), True),
     StructField("wind_direction", StringType(), True),
@@ -44,13 +44,13 @@ details_schema = StructType([
     StructField("cloud_cover", StringType(), True),
     StructField("rain_amount", StringType(), True)
 ])
- 
-# Extraire les informations du champ "details" (JSON)
+
+# Extract information from the "details" field (JSON)
 weather_df = weather_df.withColumn("details", from_json(col("details"), details_schema))
- 
-# Sélectionner et renommer les colonnes nécessaires
+
+# Select and rename necessary columns
 weather_df = weather_df.select(
-    to_timestamp(col("date"), "yyyy-MM-dd HH:mm:ss").alias("date"),
+    to_timestamp(col("date"), "yyyy-MM-dd HH:mm:ss").alias("timestamp"),
     regexp_replace(col("details.feels_like"), "[^0-9]", "").cast("int").alias("temperature"),
     col("details.wind_direction").alias("wind_direction"),
     regexp_replace(col("details.wind_speed"), "[^0-9]", "").cast("int").alias("wind_speed"),
@@ -58,13 +58,13 @@ weather_df = weather_df.select(
     regexp_replace(col("details.cloud_cover"), "[^0-9]", "").cast("int").alias("cloud_cover"),
     regexp_replace(col("details.rain_amount"), "[^0-9.]", "").cast("float").alias("precip")
 )
- 
-# Ajouter la colonne fixe avec la valeur "doh"
+
+# Add a fixed column with the value "doh"
 weather_df = weather_df.withColumn("location", lit("doh"))
- 
-# Filtrer les lignes où des colonnes nécessaires sont nulles ou vides
+
+# Filter rows where necessary columns are null or empty
 weather_df = weather_df.filter(
-    (col("date").isNotNull()) &
+    (col("timestamp").isNotNull()) &
     (col("temperature").isNotNull()) &
     (col("wind_direction").isNotNull()) &
     (col("wind_speed").isNotNull()) &
@@ -72,15 +72,15 @@ weather_df = weather_df.filter(
     (col("cloud_cover").isNotNull()) &
     (col("precip").isNotNull())
 )
- 
-# Formater la colonne de date dans le format souhaité
-weather_df = weather_df.withColumn("date", date_format(col("date"), "yyyy-MM-dd HH:mm:ss"))
- 
-# Configurer le répertoire de sortie
+
+# Extract date part from timestamp for partitioning
+weather_df = weather_df.withColumn("date", to_date(col("timestamp")))
+
+# Ensure output directories exist
 os.makedirs(output_dir, exist_ok=True)
 os.makedirs(checkpoint_dir, exist_ok=True)
- 
-# Écrire les données nettoyées dans un fichier CSV
+
+# Write the cleaned data to a CSV file partitioned by date
 query = weather_df \
     .writeStream \
     .outputMode("append") \
@@ -89,7 +89,8 @@ query = weather_df \
     .option("checkpointLocation", checkpoint_dir) \
     .option("header", "true") \
     .option("sep", ",") \
+    .partitionBy("date") \
     .start()
- 
-# Attendre la fin de la diffusion en continu
+
+# Await termination of the streaming query
 query.awaitTermination()
