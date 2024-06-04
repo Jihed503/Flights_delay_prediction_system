@@ -33,7 +33,6 @@
         <table class="table table-striped" id="results-table">
             <thead>
                 <tr>
-                    <th>Date</th>
                     <th>From</th>
                     <th>To</th>
                     <th>Aircraft</th>
@@ -69,11 +68,10 @@
 
                     data.forEach(function(flight) {
                         const row = `<tr>
-                            <td>${flight.date}</td>
                             <td>${flight.from_city}</td>
                             <td>${flight.to_city}</td>
                             <td>${flight.aircraft}</td>
-                            <td>${flight.flight_time}</td>
+                            <td>${flight.flight_time} hours</td>
                             <td>${flight.scheduled_time_departure}</td>
                             <td>${flight.actual_time_departure}</td>
                             <td>${flight.scheduled_time_arrival}</td>

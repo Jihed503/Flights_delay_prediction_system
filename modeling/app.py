@@ -28,7 +28,8 @@ def search_flights():
     for flight in flights:
         try:
             serializable_flights.append({
-                "date": flight["scheduled_time_departure"],
+                "from": flight["from"],
+                "to": flight["to"],
                 "from_city": flight["from_city"],
                 "to_city": flight["to_city"],
                 "aircraft": flight["aircraft"],
@@ -37,17 +38,12 @@ def search_flights():
                 "actual_time_departure": flight["actual_time_departure"],
                 "scheduled_time_arrival": flight["scheduled_time_arrival"],
                 "status": flight["status"],
-                "temperature": flight["temperature"],
-                "wind_direction": flight["wind_direction"],
-                "wind_speed": flight["wind_speed"],
-                "humidity": flight["humidity"],
-                "cloud_cover": flight["cloud_cover"],
-                "precip": flight["precip"]
             })
         except Exception as e:
             print(f"Error serializing flight data: {e}")
             continue
-    print(serializable_flights)
+    
+    print(flights)
     # Return sorted flights as JSON response
     return jsonify(serializable_flights)
 

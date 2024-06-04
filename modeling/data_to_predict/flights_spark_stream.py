@@ -100,7 +100,7 @@ flights_df = flights_df.withColumn("rounded_hour", to_timestamp(datetime_str, "y
 # 10. Remove duplicates
 flights_df = flights_df.dropDuplicates()
 
-# Remove the first three characters and the last character from the 'aircraft' column
+# Remove the first three characters and the last character from the 'flight' column
 flights_df = flights_df.withColumn("flight", regexp_replace(col("flight"), r'\\?"', ''))
 
 # Remove rows with null values
